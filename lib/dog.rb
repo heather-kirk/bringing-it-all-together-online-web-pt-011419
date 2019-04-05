@@ -1,7 +1,7 @@
+require 'pry' 
 class Dog
   
-  attr_accessor :name, :breed 
-  attr_reader :id 
+  attr_accessor :name, :breed, :id 
   
   def initialize(id: nil, name:, breed:)
     @id = id 
@@ -28,9 +28,9 @@ class Dog
      DB[:conn].execute(sql)
    end 
    
-   def new_from_db(row)
-     dog = Dog.new(row[0], row[1], row[2])
-     dog
+   def self.new_from_db(row)
+     row = Dog.new(id: id, name: name, breed: breed)
+     
    end 
    
    def save
@@ -56,9 +56,8 @@ class Dog
      WHERE id = ?
      SQL
      
-    DB[:conn].execute(sql, id)[0].map do |row|
-      self.ne
-   
+    row = DB[:conn].execute(sql, id).flatten
+    Dog.new(id: row[0], name: row[1], breed: row[2])
    end 
    
    def self.create(name:, breed:)
@@ -75,13 +74,14 @@ class Dog
      DB[:conn].execute(sql, self.name, self.breed, self.id)
    end 
    
-   def self.find_by_name
+   def self.find_by_name(name)
      sql = <<-SQL
      SELECT * FROM dogs
      WHERE name = ?
      SQL
      
-     DB[:conn].execute(sql,name)[1]
-     new_dog = Dog.new(name: name, breed: breed)
-   end 
+     row = DB[:conn].execute(sql,name).flatten
+    Dog.new(id: row[0], name: row[1], breed: row[2])
+    
+   end
 end 
