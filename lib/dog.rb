@@ -74,7 +74,7 @@ class Dog
       dog 
      else
       dog = self.create(name: name, breed: breed)
-      dog
+      dog.save
      end 
      dog
    end 
