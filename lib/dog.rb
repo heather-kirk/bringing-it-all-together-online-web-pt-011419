@@ -78,9 +78,7 @@ class Dog
       dog 
      else
       dog = self.create(name: name, breed: breed)
-      dog.save
      end 
-     dog
    end 
    
    def update
